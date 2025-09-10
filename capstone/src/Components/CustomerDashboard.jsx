@@ -46,7 +46,7 @@ function CustomerDashboard() {
     //logging out
     const handleLogout = async () => {
         await logoutUser();
-        nagivate ('/login');
+        navigate ('/login');
     };
     
   return (

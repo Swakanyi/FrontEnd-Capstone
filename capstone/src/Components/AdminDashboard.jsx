@@ -32,7 +32,7 @@ function AdminDashboard() {
             name,
             price: Number(price),
             stock: Number(stock),
-            category
+            category,
         };
 
         if (editingId) {
@@ -45,7 +45,7 @@ function AdminDashboard() {
         setPrice('');
         setStock('');
         setCategory('');
-        fetchProducts('');
+        fetchProducts();
     };
     //Editing product
     const handleEdit = (product) => {

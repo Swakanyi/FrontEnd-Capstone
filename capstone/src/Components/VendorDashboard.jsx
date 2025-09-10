@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../firebase';
 
 function VendorDashboard() {
+const navigate = useNavigate();
+
 const handleLogout = async () => {
         await logoutUser();
         navigate('/login')};
