@@ -5,7 +5,7 @@ import { auth } from '../firebase';
 
 function RiderDashboard() {
 
-
+  const navigate = useNavigate();
   const handleLogout = async () => {
       try {
         await signOut(auth);   
