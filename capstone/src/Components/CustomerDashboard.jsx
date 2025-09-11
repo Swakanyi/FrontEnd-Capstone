@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { addOrder, getProducts, logoutUser } from '../firebase';
+import { addOrder, getProducts } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function CustomerDashboard() {
     const [products, setProducts] = useState([]);
@@ -45,14 +47,18 @@ function CustomerDashboard() {
 
     //logging out
     const handleLogout = async () => {
-        await logoutUser();
-        navigate ('/login');
-    };
+            try {
+              await signOut(auth);   
+              navigate("/login");    
+            } catch (error) {
+              alert("Logout failed: " + error.message);
+            }
+          }
     
   return (
     <>
     <h1>Customer Dashboard</h1>
-      <button onClick={handleLogout}>Logout</button>
+      
 
       <h2>Available Products</h2>
       <ul>
@@ -70,7 +76,9 @@ function CustomerDashboard() {
           <li key={index}>{item.name} - Ksh {item.price}</li>
         ))}
       </ul>
-      {cart.length > 0 && <button onClick={handleCheckout}>Checkout</button>}
+      {cart.length > 0 && <button onClick={handleCheckout}>Checkout</button>}  
+
+      <button onClick={handleLogout}>Logout</button>
     
     </>
   )

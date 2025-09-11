@@ -1,13 +1,19 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function RiderDashboard() {
 
 
   const handleLogout = async () => {
-          await logoutUser();
-          navigate('/login')};
+      try {
+        await signOut(auth);   
+        navigate("/login");    
+      } catch (error) {
+        alert("Logout failed: " + error.message);
+      }
+    }
   
   return (
     <>

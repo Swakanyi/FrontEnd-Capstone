@@ -1,36 +1,30 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { registerUser, setUserRole } from '../firebase';
+import { setUserRole, auth } from '../firebase';
 import { Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
-
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if(!email || !password || !role){
-            alert('Please fill all fields');
-            return;
-        }
+    const handleSignUp= async () => {
         try{
-            const userCredential = await registerUser(email, password);
-            const user = userCredential.user;
-            await setUserRole(user.uid, role);
-            alert('Registration successful! Please log in.');
-            navigate('/login');
-        } catch(error){
-            alert('Error:' + error.message);
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+            setUser(res.user);
+            await setUserRole(res.user.uid,role);
+            navigate('/login')
+        }catch(error){
+            alert(error.message);
         }
     };
 
-
-  return (
+   return (
     <>
-    <form onSubmit={handleSubmit}>
+    
         <input type='email' placeholder='janedoe@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
         <input type='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)}/>
 
@@ -40,11 +34,11 @@ function Register() {
             <option value="vendor">Vendor</option>
             <option value="rider">Rider</option>
         </select>
-        <button type='submit'>Register</button>
+        <button onClick={handleSignUp}>Register</button>
 
         <p>Already have an account? <Link to="/login">Login here</Link></p>
 
-    </form>
+    
     </>
   )
 }

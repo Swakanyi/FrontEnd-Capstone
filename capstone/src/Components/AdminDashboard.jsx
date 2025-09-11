@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { addProduct, deleteProduct, getProducts, logoutUser, updateProduct } from '../firebase';
+import { addProduct, deleteProduct, getProducts, updateProduct } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function AdminDashboard() {
     const [products, setProducts] = useState([]);
@@ -11,6 +13,7 @@ function AdminDashboard() {
     const [editingId, setEditingId] = useState(null);
 
     const navigate =useNavigate();
+    
     useEffect(() =>{
         fetchProducts();
     }, []);
@@ -62,15 +65,19 @@ function AdminDashboard() {
     };
     //logout
     const handleLogout = async () => {
-        await logoutUser();
-        navigate('/login');
-    };
+        try {
+          await signOut(auth);   
+          navigate("/login");    
+        } catch (error) {
+          alert("Logout failed: " + error.message);
+        }
+      }
 
 
   return (
     <>
     <h1>Admin DashBoard</h1>
-    <button onClick={handleLogout}>LogOut</button>
+    
 
     <h2>Manage Products</h2>
     <form onSubmit={handleSubmit}>
@@ -92,6 +99,8 @@ function AdminDashboard() {
             </li>
         ))}
     </ul>
+
+    <button onClick={handleLogout}>LogOut</button>
     </>
   );
 }

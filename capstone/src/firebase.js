@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, signOut, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, setDoc,getDoc } from "firebase/firestore"
 
 // import { getAnalytics } from "firebase/analytics";
@@ -24,12 +24,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
  
-export const registerUser = (email, password) => createUserWithEmailAndPassword (auth, email, password);
-export const loginUser = (email, password) => signInWithEmailAndPassword(auth, email, password);
-export const logoutUser = () => signOut(auth);
+// export const registerUser = (email, password) => createUserWithEmailAndPassword (auth, email, password);
+// export const loginUser = (email, password) => signInWithEmailAndPassword(auth, email, password);
+// export const logoutUser = () => signOut(auth);
 
-const db = getFirestore(app);
+
 export const usersCollection = collection(db, 'users');  //all user roles
 export const productsCollection = collection(db, 'products')
 export const ordersCollection = collection(db, 'orders')
